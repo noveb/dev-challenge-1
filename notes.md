@@ -25,3 +25,12 @@ Risks: As of now, the biggest risk I see is with the AWS deployment. That's some
 10:00: more setup, install Node LTS 18.16.0, gitmoji, more coffee
 
 10:20: install express, TS, node & express types, docker, d-c .... setup everything
+
+19:50: It is getting late and I am done for today. Currently working on deploying the service in AWS ECS. It's tricky as I have never done this
+
+A few things held me back: 
+  - Not coding since February, things just don't work as smooth as usually and my private laptop was not prepared for this (my fault).
+  - Project setup from scratch cost me quite some time.
+  - There was a compatibility issue with S3client and minio (solved)
+  
+So, AWS still says: "scalara-api deployment is in progress. It takes a few minutes." So I end for today.
