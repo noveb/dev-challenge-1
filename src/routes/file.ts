@@ -5,7 +5,10 @@ import { createHash } from 'node:crypto';
 
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import database from '../database';
-import { s3, bucketName } from '../storage';
+import storage from '../storage';
+import { filterQuery, md5, upload } from './file.utils';
+
+const router = express.Router();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -19,12 +22,17 @@ function md5(content: Buffer) {
 router.get('/', async (req: Request, res: Response) => {
   const db = await database.getDb();
 
-  const fileList = await db.collection('files').find({}, { projection: { name: 1, id: 1 } }).toArray();
-  return res.status(200).send(fileList);
+  const params = req.query;
+  const filteredQuery = filterQuery(params);
+
+  const fileList = await db.collection('files').find(filteredQuery).toArray();
+  return res.send(fileList);
 });
 
 router.post('/', upload.single('file'), async (req: Request, res: Response) => {
   const db = await database.getDb();
+  const s3 = await storage.getS3();
+
   const { file, body } = req;
 
   if (!file) {
@@ -38,6 +46,7 @@ router.post('/', upload.single('file'), async (req: Request, res: Response) => {
 
   const data = {
     name: body.name,
+    originalname: file.originalname,
     author: body.author,
     user: body.user,
     md5: md5Hash,
@@ -46,14 +55,14 @@ router.post('/', upload.single('file'), async (req: Request, res: Response) => {
     meta: body.meta,
   };
 
-  await db.collection('files').insertOne(data);
+  const result = await db.collection('files').insertOne(data);
   await s3.send(new PutObjectCommand({
-    Bucket: bucketName,
-    Key: data.name,
+    Bucket: storage.bucketName,
+    Key: result.insertedId.toString(),
     Body: file.buffer,
   }));
 
-  return res.status(204).send(data);
+  return res.status(201).send(data);
 });
 
 export default router;
