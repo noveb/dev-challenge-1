@@ -17,7 +17,7 @@ export default class Database {
     const url = 'mongodb://mongo:27017';
     this.client = new MongoClient(url);
     await this.client.connect();
-    console.log('Connected successfully to server');
+    console.log('Database ready');
     this.db = this.client.db('scalara');
   }
 
