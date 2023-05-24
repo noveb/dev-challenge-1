@@ -9,6 +9,7 @@
     "debug:docker": "nodemon ./src/index.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.338.0",
     "debug": "~2.6.9",
     "eslint": "^8.41.0",
     "express": "~4.16.1",
