@@ -1,23 +1,40 @@
 import type { Request, Response } from 'express';
 import express from 'express';
-import multer from 'multer';
-import { createHash } from 'node:crypto';
-
-import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
+import { ObjectId } from 'mongodb';
+import { Readable } from 'stream';
 import database from '../database';
 import storage from '../storage';
 import { filterQuery, md5, upload } from './file.utils';
 
 const router = express.Router();
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
+router.get('/:id', async (req: Request, res: Response) => {
+  const db = await database.getDb();
+  const s3 = await storage.getS3();
 
-const router = express.Router();
+  const { id } = req.params;
 
-function md5(content: Buffer) {
-  return createHash('md5').update(content).digest('hex');
-}
+  const fileMeta = await db.collection('files').findOne({ _id: new ObjectId(id) });
+  if (!fileMeta) {
+    return res.sendStatus(404);
+  }
+
+  const response = await s3.send(new GetObjectCommand({
+    Bucket: storage.bucketName,
+    // eslint-disable-next-line no-underscore-dangle
+    Key: fileMeta._id.toString(),
+  }));
+
+  if (response.Body instanceof Readable) { // Checking if Body is a stream
+    res.setHeader('Content-disposition', `attachment; filename=${fileMeta.originalname}`);
+    res.setHeader('Content-type', 'application/octet-stream');
+
+    response.Body.pipe(res);
+  } else {
+    res.status(500).send('Could not retrieve the file');
+  }
+});
 
 router.get('/', async (req: Request, res: Response) => {
   const db = await database.getDb();
