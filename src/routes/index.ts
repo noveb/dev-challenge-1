@@ -8,16 +8,21 @@ import storage from '../storage';
 const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
-  const db = await database.getDb();
-  const s3 = await storage.getS3();
+  try {
+    const db = await database.getDb();
+    const s3 = await storage.getS3();
 
-  const result = {
-    api_ready: true,
-    db_ready: !!await db.stats(),
-    storage_ready: !!await s3.send(new ListBucketsCommand({})),
-  };
+    const result = {
+      api_ready: true,
+      db_ready: await db.stats(),
+      storage_ready: await s3.send(new ListBucketsCommand({})),
+    };
 
-  return res.send(result);
+    return res.send(result);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send(error);
+  }
 });
 
 export default router;
