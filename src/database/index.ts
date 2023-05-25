@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { MongoClient, Db } from 'mongodb';
 
 export default class Database {
@@ -14,11 +13,21 @@ export default class Database {
   }
 
   private static async connect(): Promise<void> {
-    const url = 'mongodb://mongo:27017';
-    this.client = new MongoClient(url);
-    await this.client.connect();
-    console.log('Database ready');
-    this.db = this.client.db('scalara');
+    const url = process.env.DB_URL;
+
+    if (!url) {
+      throw new Error('DB env var not set');
+    }
+
+    try {
+      this.client = new MongoClient(url);
+      await this.client.connect();
+      console.log('Database ready');
+      this.db = this.client.db('scalara');
+    } catch (error) {
+      console.error('Failed to connect to the database', error);
+      throw error;
+    }
   }
 
   public static async disconnect(): Promise<void> {

@@ -50,3 +50,9 @@ aws ecr get-login-password --region eu-central-1 | docker login --username AWS -
 ```sh
 docker push $AWS_ACCOUNT_ID.dkr.ecr.eu-central-1.amazonaws.com/scalara:latest
 ```
+
+## Add secrets and env vars to AWS Parameter Store
+
+```
+aws ssm put-parameter --name "....." --type "String" --value "....."
+```
