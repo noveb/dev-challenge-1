@@ -1,7 +1,6 @@
 import type QueryString from 'qs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
-
 import multer from 'multer';
 
 export function filterQuery(params: QueryString.ParsedQs) {
@@ -10,13 +9,13 @@ export function filterQuery(params: QueryString.ParsedQs) {
     author: params.author as string,
     user: params.user as string,
   };
-  const filteredQuery = Object.entries(query).reduce((result, [key, value]) => {
+
+  return Object.entries(query).reduce((result, [key, value]) => {
     if (value !== undefined) {
       return { ...result, [key]: query[key] };
     }
     return result;
   }, {});
-  return filteredQuery;
 }
 
 export function md5(content: Buffer) {
@@ -53,8 +52,9 @@ export const upload = multer({
   limits: {
     /**
      * 128 mb file size as unlimited size could very easily exceed memory
-     * if upload for huge files is needed, client should get a s3 upload link
-     * as described here https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html
+     * if upload for huge files is needed, files needed to be streamed through
+     * api to S3 or client should get a s3 upload link as described
+     * here https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html
      */
     fileSize: 1024 * 1024 * 128,
   },

@@ -1,40 +1,18 @@
-#!/usr/bin/env node
-
-/**
- * Module dependencies.
- */
-
 import debug from 'debug';
 import * as http from 'http';
 import app from './app';
-
-/**
- * Get port from environment and store in Express.
- */
 
 // eslint-disable-next-line @typescript-eslint/no-use-before-define
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
-/**
- * Create HTTP server.
- */
-
 const server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
 
 server.listen(port);
 // eslint-disable-next-line @typescript-eslint/no-use-before-define
 server.on('error', onError);
 // eslint-disable-next-line @typescript-eslint/no-use-before-define
 server.on('listening', onListening);
-
-/**
- * Normalize a port into a number, string, or false.
- */
 
 function normalizePort(value: string): number | string | boolean {
   const parsedValue = parseInt(value, 10);
@@ -49,10 +27,6 @@ function normalizePort(value: string): number | string | boolean {
 
   return false;
 }
-
-/**
- * Event listener for HTTP server "error" event.
- */
 
 function onError(error: NodeJS.ErrnoException): void {
   if (error.syscall !== 'listen') {
@@ -77,10 +51,6 @@ function onError(error: NodeJS.ErrnoException): void {
       throw error;
   }
 }
-
-/**
- * Event listener for HTTP server "listening" event.
- */
 
 function onListening(): void {
   const addr = server.address();
