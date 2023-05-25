@@ -39,6 +39,10 @@ Solution for the Scalara dev challange
 
 ## Push image
 
+```
+docker build --target production -t scalara:latest .
+```
+
 ```sh
 docker tag $image_id $AWS_ACCOUNT_ID.dkr.ecr.eu-central-1.amazonaws.com/scalara:latest
 ```

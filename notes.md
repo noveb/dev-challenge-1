@@ -43,3 +43,5 @@ So, AWS still says: "scalara-api deployment is in progress. It takes a few minut
  - create & configure S3
  - create & configure DocumentDB
  - if nothing works, throw it on DO :D
+
+16:20: The S3 bucket is set up and the api can connect. The database is set up but I can not get the api connected. There are weird errors around SSL/TLS either from DB or mongodb client. The API is running here http://3.64.149.41:3000/ in ECS but as it gets no DB connection, it does nothing. It works locally like a charm. But I stop it now, makes no sense to continue for this challenge. In normal live I would have gotten me someone to rubber duck and 2 more eyes on this hours ago. 
