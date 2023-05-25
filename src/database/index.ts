@@ -20,7 +20,9 @@ export default class Database {
     }
 
     try {
-      this.client = new MongoClient(url);
+      this.client = new MongoClient(url, {
+        tlsCAFile: '/app/src/database/eu-central-1-bundle.pem',
+      });
       await this.client.connect();
       console.log('Database ready');
       this.db = this.client.db('scalara');

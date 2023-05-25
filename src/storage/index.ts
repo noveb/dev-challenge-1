@@ -1,5 +1,5 @@
 import {
-  Bucket, CreateBucketCommand, ListBucketsCommand, S3Client,
+  Bucket, CreateBucketCommand, ListBucketsCommand, S3Client, S3ClientConfig,
 } from '@aws-sdk/client-s3';
 
 export default class Storage {
@@ -20,19 +20,21 @@ export default class Storage {
     const endpoint = process.env.S3_ENDPOINT;
     const region = process.env.S3_REGION;
 
-    if (!accessKeyId || !secretAccessKey || !endpoint || !this.bucketName || !region) {
+    if (!accessKeyId || !secretAccessKey || !this.bucketName || !region) {
       throw new Error('S3 env var not set');
     }
 
-    this.s3 = new S3Client({
+    const options: S3ClientConfig = {
       credentials: {
         accessKeyId,
         secretAccessKey,
       },
-      endpoint,
       region,
       forcePathStyle: true,
-    });
+    };
+    if (endpoint) options.endpoint = endpoint;
+
+    this.s3 = new S3Client(options);
 
     await this.initBucket();
     console.log('Storage ready');

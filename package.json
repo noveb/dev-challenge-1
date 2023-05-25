@@ -6,7 +6,8 @@
     "start": "node ./dist/index.js",
     "lint": "eslint --cache --ext .js,.ts ./src",
     "debug": "NODE_ENV=development PORT=3000 nodemon ./src/index.ts",
-    "debug:docker": "nodemon ./src/index.ts"
+    "debug:docker": "nodemon ./src/index.ts",
+    "build": "tsc"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.338.0",
