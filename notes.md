@@ -34,3 +34,12 @@ A few things held me back:
   - There was a compatibility issue with S3client and minio (solved)
   
 So, AWS still says: "scalara-api deployment is in progress. It takes a few minutes." So I end for today.
+
+12:00: Back at it. Plan for today is:
+ - check why service in ECS does not start
+   - nothing useful to see in Cloudwatch or Cloudformation
+ - extract all env variables to env and add in AWS parameter store
+ - create production image of api and push
+ - create & configure S3
+ - create & configure DocumentDB
+ - if nothing works, throw it on DO :D
