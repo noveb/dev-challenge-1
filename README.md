@@ -20,16 +20,22 @@ Solution for the Scalara dev challange
     Most things can be done in/with Docker but it is still useful to install the dependencies. 
     
     ```bash
-    npm install
+    npm ci
     ```
 
-3. Build Docker image for development
+3. Copy template.env to .env
+
+    ```bash
+    cp template.env .env
+    ```
+
+4. Build Docker image for development
 
     ```bash
     docker-compose build
     ```
 
-4. Run the Docker container for development
+5. Run the Docker container for development
 
     ```bash
     docker-compose up
