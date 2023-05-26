@@ -42,6 +42,7 @@ export default class Storage {
 
   private static async initBucket(): Promise<void> {
     const buckets = await this.s3.send(new ListBucketsCommand({}));
+
     const anyBuckets = buckets.Buckets?.length;
     const ourBucket = buckets.Buckets?.find((bucket: Bucket) => bucket.Name === this.bucketName);
 

@@ -11,8 +11,10 @@ const router = express.Router();
 
 router.get('/:id', async (req: Request, res: Response) => {
   try {
-    const db = await database.getDb();
-    const s3 = await storage.getS3();
+    const [db, s3] = await Promise.all([
+      database.getDb(),
+      storage.getS3(),
+    ]);
 
     const { id } = req.params;
 
@@ -27,7 +29,7 @@ router.get('/:id', async (req: Request, res: Response) => {
       Key: fileMeta._id.toString(),
     }));
 
-    if (!(response.Body instanceof Readable)) { // Checking if Body is a stream
+    if (!(response.Body instanceof Readable)) {
       return res.status(500).send('Could not retrieve the file');
     }
 
@@ -57,8 +59,10 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.post('/', upload.single('file'), async (req: Request, res: Response) => {
   try {
-    const db = await database.getDb();
-    const s3 = await storage.getS3();
+    const [db, s3] = await Promise.all([
+      database.getDb(),
+      storage.getS3(),
+    ]);
 
     const { file, body } = req;
 

@@ -9,13 +9,19 @@ const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const db = await database.getDb();
-    const s3 = await storage.getS3();
+    const [db, s3] = await Promise.all([
+      database.getDb(),
+      storage.getS3(),
+    ]);
+
+    const [dbReady, storageReady] = await Promise.all([
+      db.stats(), s3.send(new ListBucketsCommand({})),
+    ]);
 
     const result = {
-      api_ready: true,
-      db_ready: await db.stats(),
-      storage_ready: await s3.send(new ListBucketsCommand({})),
+      apiReady: true,
+      dbReady: !!dbReady,
+      storageReady: !!storageReady,
     };
 
     return res.send(result);
