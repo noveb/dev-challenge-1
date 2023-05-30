@@ -25,7 +25,7 @@ export default class Database {
       });
       await this.client.connect();
       console.log('Database ready');
-      this.db = this.client.db('scalara');
+      this.db = this.client.db('fileService');
     } catch (error) {
       console.error('Failed to connect to the database', error);
       throw error;

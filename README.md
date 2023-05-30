@@ -1,5 +1,6 @@
-# scalara
-Solution for the Scalara dev challange
+# Dev Challenge 1
+
+Solution for a dev challange. Task was to create a file service with upload, download and search functionality.
 
 ---
 ## Prerequisites for development
@@ -12,7 +13,7 @@ Solution for the Scalara dev challange
 1. Clone the repo
 
     ```bash
-    git clone https://github.com/noveb/scalara.git
+    git clone https://github.com/noveb/dev-challenge-1.git
     ```
 
 2. Install development dependencies
@@ -46,11 +47,11 @@ Solution for the Scalara dev challange
 ## Push image
 
 ```
-docker build --target production -t scalara:latest .
+docker build --target production -t $NAME:latest .
 ```
 
 ```sh
-docker tag $image_id $AWS_ACCOUNT_ID.dkr.ecr.eu-central-1.amazonaws.com/scalara:latest
+docker tag $image_id $AWS_ACCOUNT_ID.dkr.ecr.eu-central-1.amazonaws.com/$NAME:latest
 ```
 
 ```sh
@@ -58,7 +59,7 @@ aws ecr get-login-password --region eu-central-1 | docker login --username AWS -
 ```
 
 ```sh
-docker push $AWS_ACCOUNT_ID.dkr.ecr.eu-central-1.amazonaws.com/scalara:latest
+docker push $AWS_ACCOUNT_ID.dkr.ecr.eu-central-1.amazonaws.com/$NAME:latest
 ```
 
 ## Add secrets and env vars to AWS Parameter Store
